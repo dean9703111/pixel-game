@@ -112,7 +112,7 @@ const Game = () => {
                     {currentQuestion.question}
                 </h3>
 
-                <div style={{ display: 'grid', gap: '15px' }}>
+                <div style={{ display: 'grid', gap: '3px' }}>
                     {currentQuestion.options.map((option, idx) => (
                         <PixelButton
                             key={idx}

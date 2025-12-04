@@ -6,7 +6,7 @@ import Result from './pages/Result';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/pixel-game">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />

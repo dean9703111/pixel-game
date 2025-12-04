@@ -15,6 +15,9 @@ const BossAvatar = ({ seed, size = 150, style = {}, className = '' }) => {
                 style={{
                     width: size,
                     height: size,
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
                     imageRendering: 'pixelated',
                     border: '4px solid #fff',
                     background: '#000'

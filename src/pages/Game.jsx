@@ -84,60 +84,52 @@ const Game = () => {
     const progress = ((currentIndex + 1) / questions.length) * 100;
 
     return (
-        <div className="game-page" style={{
-            width: '100%',
-            maxWidth: '800px',
-            height: 'calc(100dvh - 40px)', // Full viewport height minus padding
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between'
-        }}>
-            <div style={{ flexShrink: 0 }}>
-                <div style={{ marginBottom: '10px', color: '#f0c029' }}>
-                    LEVEL {currentIndex + 1} / {questions.length}
-                </div>
+        <div className="game-page" style={{ width: '100%', maxWidth: '800px' }}>
+            {/* Level indicator */}
+            <div style={{ marginBottom: '15px', color: '#f0c029', textAlign: 'center' }}>
+                LEVEL {currentIndex + 1} / {questions.length}
+            </div>
 
-                {/* Progress Bar */}
+            {/* Progress Bar */}
+            <div style={{
+                width: '100%',
+                height: '15px',
+                border: '4px solid #fff',
+                marginBottom: '20px',
+                position: 'relative'
+            }}>
                 <div style={{
-                    width: '100%',
-                    height: '15px',
-                    border: '4px solid #fff',
-                    marginBottom: '10px',
-                    position: 'relative'
-                }}>
-                    <div style={{
-                        width: `${progress}%`,
-                        height: '100%',
-                        background: '#f0c029',
-                        transition: 'width 0.3s'
-                    }} />
+                    width: `${progress}%`,
+                    height: '100%',
+                    background: '#f0c029',
+                    transition: 'width 0.3s'
+                }} />
+            </div>
+
+            {/* Boss Avatar */}
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                <BossAvatar seed={`boss-${currentQuestion.id}`} size={120} />
+            </div>
+
+            {/* Question Card */}
+            <PixelCard style={{ margin: 0, padding: '15px' }}>
+                <h3 className="readable-text" style={{ marginBottom: '15px', lineHeight: '1.4', fontSize: '16px' }}>
+                    {currentQuestion.question}
+                </h3>
+
+                <div style={{ display: 'grid', gap: '8px' }}>
+                    {currentQuestion.options.map((option, idx) => (
+                        <PixelButton
+                            key={idx}
+                            onClick={() => handleAnswer(option)}
+                            className="secondary readable-text"
+                            style={{ width: '100%', textAlign: 'left', fontSize: '14px', textTransform: 'none', padding: '10px 12px' }}
+                        >
+                            {option}
+                        </PixelButton>
+                    ))}
                 </div>
-            </div>
-
-            <div style={{ flex: '1 1 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
-                <BossAvatar seed={`boss-${currentQuestion.id}`} size={100} />
-            </div>
-
-            <div style={{ flexShrink: 0 }}>
-                <PixelCard className="game-card" style={{ margin: 0, padding: '15px' }}>
-                    <h3 className="readable-text" style={{ marginBottom: '10px', lineHeight: '1.3', fontSize: '16px' }}>
-                        {currentQuestion.question}
-                    </h3>
-
-                    <div style={{ display: 'grid', gap: '6px' }}>
-                        {currentQuestion.options.map((option, idx) => (
-                            <PixelButton
-                                key={idx}
-                                onClick={() => handleAnswer(option)}
-                                className="secondary readable-text"
-                                style={{ width: '100%', textAlign: 'left', fontSize: '14px', textTransform: 'none', padding: '8px 10px' }}
-                            >
-                                {option}
-                            </PixelButton>
-                        ))}
-                    </div>
-                </PixelCard>
-            </div>
+            </PixelCard>
         </div>
     );
 };

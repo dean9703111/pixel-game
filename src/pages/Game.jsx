@@ -84,47 +84,60 @@ const Game = () => {
     const progress = ((currentIndex + 1) / questions.length) * 100;
 
     return (
-        <div className="game-page" style={{ width: '100%', maxWidth: '800px' }}>
-            <div style={{ marginBottom: '20px', color: '#f0c029' }}>
-                LEVEL {currentIndex + 1} / {questions.length}
-            </div>
-
-            {/* Progress Bar */}
-            <div style={{
-                width: '100%',
-                height: '20px',
-                border: '4px solid #fff',
-                marginBottom: '20px',
-                position: 'relative'
-            }}>
-                <div style={{
-                    width: `${progress}%`,
-                    height: '100%',
-                    background: '#f0c029',
-                    transition: 'width 0.3s'
-                }} />
-            </div>
-
-            <BossAvatar seed={`boss-${currentQuestion.id}`} />
-
-            <PixelCard>
-                <h3 className="readable-text" style={{ marginBottom: '30px', lineHeight: '1.6', fontSize: '20px' }}>
-                    {currentQuestion.question}
-                </h3>
-
-                <div style={{ display: 'grid', gap: '3px' }}>
-                    {currentQuestion.options.map((option, idx) => (
-                        <PixelButton
-                            key={idx}
-                            onClick={() => handleAnswer(option)}
-                            className="secondary readable-text"
-                            style={{ width: '100%', textAlign: 'left', fontSize: '18px', textTransform: 'none' }}
-                        >
-                            {option}
-                        </PixelButton>
-                    ))}
+        <div className="game-page" style={{
+            width: '100%',
+            maxWidth: '800px',
+            height: 'calc(100dvh - 40px)', // Full viewport height minus padding
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+        }}>
+            <div style={{ flexShrink: 0 }}>
+                <div style={{ marginBottom: '10px', color: '#f0c029' }}>
+                    LEVEL {currentIndex + 1} / {questions.length}
                 </div>
-            </PixelCard>
+
+                {/* Progress Bar */}
+                <div style={{
+                    width: '100%',
+                    height: '15px',
+                    border: '4px solid #fff',
+                    marginBottom: '10px',
+                    position: 'relative'
+                }}>
+                    <div style={{
+                        width: `${progress}%`,
+                        height: '100%',
+                        background: '#f0c029',
+                        transition: 'width 0.3s'
+                    }} />
+                </div>
+            </div>
+
+            <div style={{ flex: '1 1 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
+                <BossAvatar seed={`boss-${currentQuestion.id}`} size={100} />
+            </div>
+
+            <div style={{ flexShrink: 0 }}>
+                <PixelCard className="game-card" style={{ margin: 0, padding: '15px' }}>
+                    <h3 className="readable-text" style={{ marginBottom: '10px', lineHeight: '1.3', fontSize: '16px' }}>
+                        {currentQuestion.question}
+                    </h3>
+
+                    <div style={{ display: 'grid', gap: '6px' }}>
+                        {currentQuestion.options.map((option, idx) => (
+                            <PixelButton
+                                key={idx}
+                                onClick={() => handleAnswer(option)}
+                                className="secondary readable-text"
+                                style={{ width: '100%', textAlign: 'left', fontSize: '14px', textTransform: 'none', padding: '8px 10px' }}
+                            >
+                                {option}
+                            </PixelButton>
+                        ))}
+                    </div>
+                </PixelCard>
+            </div>
         </div>
     );
 };

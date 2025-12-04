@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-const BossAvatar = ({ seed, size = 150 }) => {
+const BossAvatar = ({ seed, size = 150, style = {}, className = '' }) => {
     // Use DiceBear Pixel Art style
     // We can use 'pixel-art' or 'pixel-art-neutral'
     const avatarUrl = useMemo(() => {
@@ -8,7 +8,7 @@ const BossAvatar = ({ seed, size = 150 }) => {
     }, [seed, size]);
 
     return (
-        <div className="boss-avatar" style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div className={`boss-avatar ${className}`} style={{ textAlign: 'center', ...style }}>
             <img
                 src={avatarUrl}
                 alt="Boss"

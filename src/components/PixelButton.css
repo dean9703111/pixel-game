@@ -1,7 +1,7 @@
 .pixel-btn {
     position: relative;
     display: inline-block;
-    padding: 15px 30px;
+    padding: 15px 20px;
     font-size: 16px;
     text-transform: uppercase;
     color: #fff;
@@ -10,10 +10,12 @@
     cursor: pointer;
     user-select: none;
     image-rendering: pixelated;
-    margin: 10px;
-    transition: transform 0.1s;
+    margin: 5px 0;
+    transition: transform 0.1s, filter 0.1s;
+    width: 100%;
 }
 
+/* The visual box of the button */
 .pixel-btn::before {
     content: "";
     position: absolute;
@@ -22,37 +24,70 @@
     width: 100%;
     height: 100%;
     background: #3e3e3e;
+    /* Pixel border with 3D effect */
     box-shadow:
-        -4px 0 0 0 #fff,
-        4px 0 0 0 #fff,
-        0 -4px 0 0 #fff,
-        0 4px 0 0 #fff;
+        inset 2px 2px 0px 0px rgba(255, 255, 255, 0.5),
+        inset -2px -2px 0px 0px rgba(0, 0, 0, 0.5),
+        -2px 0 0 0 #000,
+        2px 0 0 0 #000,
+        0 -2px 0 0 #000,
+        0 2px 0 0 #000;
     z-index: -1;
+    transition: background 0.2s;
 }
 
 .pixel-btn:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
 .pixel-btn:active {
-    transform: scale(0.95);
+    transform: translateY(2px);
+}
+
+.pixel-btn:active::before {
+    box-shadow:
+        inset 2px 2px 0px 0px rgba(0, 0, 0, 0.5),
+        inset -2px -2px 0px 0px rgba(255, 255, 255, 0.2),
+        -2px 0 0 0 #000,
+        2px 0 0 0 #000,
+        0 -2px 0 0 #000,
+        0 2px 0 0 #000;
+}
+
+/* Primary Button (Yellow) */
+.pixel-btn.primary {
+    color: #000;
+    font-weight: bold;
 }
 
 .pixel-btn.primary::before {
     background: #f0c029;
 }
 
-.pixel-btn.primary {
-    color: #000;
-    text-shadow: none;
+/* Secondary Button (Options) */
+.pixel-btn.secondary {
+    color: #fff;
+    text-align: left;
 }
 
 .pixel-btn.secondary::before {
-    background: #555;
+    background: #4a4a4a;
+    border: 2px solid #000;
+    /* Extra definition */
+}
+
+.pixel-btn.secondary:hover::before {
+    background: #f0c029;
+}
+
+.pixel-btn.secondary:hover {
+    color: #000;
 }
 
 .pixel-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+    filter: grayscale(1);
 }

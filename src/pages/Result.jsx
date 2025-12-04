@@ -18,28 +18,36 @@ const Result = () => {
             return;
         }
 
+        // Create a unique session ID for this game attempt based on the first question ID and timestamp or just use a flag
+        // A simple way is to use the state object itself as a key, but state changes on reload? No, state is preserved in history.
+        // Let's use a combination of question IDs as a unique key for this "game"
+        const gameId = state.questions.map(q => q.id).join('-');
+        const sessionKey = `submitted_${gameId}`;
+
+        if (sessionStorage.getItem(sessionKey)) {
+            // Already submitted, maybe we should just redirect home or show an error?
+            // Or better, if we saved the result in sessionStorage, we could show it?
+            // For now, let's just redirect to home to prevent "re-rolling" or duplicate submission errors
+            console.log('Already submitted this game session');
+            navigate('/');
+            return;
+        }
+
         if (submittedRef.current) return;
         submittedRef.current = true;
 
         const submit = async () => {
             try {
                 const userId = localStorage.getItem('pixel_game_user_id');
-                // Calculate passed status here
                 const passThreshold = parseInt(import.meta.env.VITE_PASS_THRESHOLD || 3);
-                // We need to count correct answers before submitting to know if passed
-                // But wait, we don't know which are correct until backend tells us?
-                // Actually, backend calculates score. 
-                // So we can't know if passed BEFORE submitting unless we validate locally.
-                // But `code.gs` returns `correctCount`. 
-                // So we should let backend calculate score, return it, AND THEN we might need to update "First Clear"?
-                // No, that would require two requests.
-                // Better approach: Send the threshold to the backend.
 
                 const data = await submitScore(userId, state.answers, passThreshold);
                 setResult(data);
+
+                // Mark as submitted
+                sessionStorage.setItem(sessionKey, 'true');
             } catch (error) {
                 console.error(error);
-                // Reset if error allows retry? No, usually we just show error.
             } finally {
                 setLoading(false);
             }
@@ -76,30 +84,62 @@ const Result = () => {
 
     if (showReview) {
         return (
-            <div className="result-page" style={{ textAlign: 'center', width: '100%', maxWidth: '800px' }}>
+            <div className="result-page" style={{ textAlign: 'center', width: '100%', maxWidth: '800px', paddingBottom: '40px' }}>
                 <PixelCard>
-                    <h2 style={{ marginBottom: '30px', color: '#f0c029' }}>REVIEW ANSWERS</h2>
+                    <h2 style={{ marginBottom: '20px', color: '#f0c029' }}>REVIEW ANSWERS</h2>
 
-                    <div style={{ textAlign: 'left', display: 'grid', gap: '20px' }}>
+                    <div style={{ textAlign: 'left', display: 'grid', gap: '15px' }}>
                         {result.details && result.details.map((detail, idx) => {
                             // Find original question text
                             const questionText = state.questions.find(q => q.id == detail.id)?.question || 'Unknown Question';
+                            const isCorrect = detail.isCorrect;
 
                             return (
                                 <div key={idx} className="readable-text" style={{
-                                    border: '4px solid #fff',
+                                    border: `4px solid ${isCorrect ? '#4caf50' : '#f44336'}`,
                                     padding: '15px',
-                                    background: detail.isCorrect ? '#2e7d32' : '#c62828'
+                                    background: '#fff',
+                                    color: '#000',
+                                    position: 'relative'
                                 }}>
-                                    <div style={{ marginBottom: '10px', lineHeight: '1.4', fontWeight: 'bold' }}>
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '-12px',
+                                        right: '10px',
+                                        background: isCorrect ? '#4caf50' : '#f44336',
+                                        color: '#fff',
+                                        padding: '2px 8px',
+                                        fontSize: '12px',
+                                        fontFamily: 'var(--font-pixel)'
+                                    }}>
+                                        {isCorrect ? 'CORRECT' : 'WRONG'}
+                                    </div>
+
+                                    <div style={{ marginBottom: '10px', lineHeight: '1.4', fontWeight: 'bold', fontSize: '16px' }}>
                                         {idx + 1}. {questionText}
                                     </div>
-                                    <div style={{ fontSize: '16px', color: '#f0f0f0' }}>
-                                        YOUR ANSWER: {detail.userAnswer}
-                                        {!detail.isCorrect && (
-                                            <span style={{ display: 'block', color: '#fff', marginTop: '5px', fontWeight: 'bold' }}>
-                                                CORRECT: {detail.correctAnswer}
-                                            </span>
+
+                                    <div style={{ fontSize: '14px', display: 'grid', gap: '5px' }}>
+                                        <div style={{
+                                            color: isCorrect ? '#2e7d32' : '#d32f2f',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '5px'
+                                        }}>
+                                            <span>YOURS:</span>
+                                            <span style={{ fontWeight: 'bold' }}>{detail.userAnswer}</span>
+                                        </div>
+
+                                        {!isCorrect && (
+                                            <div style={{
+                                                color: '#2e7d32',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '5px'
+                                            }}>
+                                                <span>RIGHT:</span>
+                                                <span style={{ fontWeight: 'bold' }}>{detail.correctAnswer}</span>
+                                            </div>
                                         )}
                                     </div>
                                 </div>

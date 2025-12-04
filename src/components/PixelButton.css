@@ -1,0 +1,58 @@
+.pixel-btn {
+    position: relative;
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #fff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    image-rendering: pixelated;
+    margin: 10px;
+    transition: transform 0.1s;
+}
+
+.pixel-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #3e3e3e;
+    box-shadow:
+        -4px 0 0 0 #fff,
+        4px 0 0 0 #fff,
+        0 -4px 0 0 #fff,
+        0 4px 0 0 #fff;
+    z-index: -1;
+}
+
+.pixel-btn:hover {
+    transform: scale(1.05);
+}
+
+.pixel-btn:active {
+    transform: scale(0.95);
+}
+
+.pixel-btn.primary::before {
+    background: #f0c029;
+}
+
+.pixel-btn.primary {
+    color: #000;
+    text-shadow: none;
+}
+
+.pixel-btn.secondary::before {
+    background: #555;
+}
+
+.pixel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}

@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&family=Roboto:wght@400;700&display=swap');
+
+:root {
+  --pixel-bg: #2c2c2c;
+  --pixel-text: #ffffff;
+  --pixel-accent: #f0c029;
+  --pixel-border: #ffffff;
+  --pixel-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.5);
+  --font-pixel: 'Press Start 2P', 'DotGothic16', cursive;
+  --font-readable: 'Roboto', 'DotGothic16', sans-serif;
+}
+
+.readable-text {
+  font-family: var(--font-readable);
+  letter-spacing: 0.5px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* Use DotGothic16 as fallback for Chinese/Kanji */
+  font-family: var(--font-pixel);
+  background-color: var(--pixel-bg);
+  color: var(--pixel-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: none;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+@media (max-width: 600px) {
+  #root {
+    padding: 10px;
+  }
+}
+
+button {
+  font-family: var(--font-pixel);
+  cursor: pointer;
+}
+
+input {
+  font-family: var(--font-pixel);
+  padding: 10px;
+  border: 4px solid var(--pixel-border);
+  background: #000;
+  color: #fff;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+input:focus {
+  border-color: var(--pixel-accent);
+}
